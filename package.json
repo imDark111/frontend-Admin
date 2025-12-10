@@ -8,6 +8,8 @@
     "start": "ng serve",
     "start:local": "ionic serve -- --host 0.0.0.0",
     "build": "ng build",
+    "build:prod": "ng build --configuration production --base-href /frontend-Admin/ && node scripts/create-404.js",
+    "deploy": "npm run build:prod && npx angular-cli-ghpages --dir=www --no-silent",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint"
