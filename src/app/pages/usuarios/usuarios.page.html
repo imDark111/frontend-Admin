@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Usuarios</ion-title>
+  </ion-toolbar>
+  
+  <ion-toolbar>
+    <ion-searchbar 
+      placeholder="Buscar usuario..."
+      (ionInput)="buscar($event)"
+      [debounce]="300">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="cargarUsuarios($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="cargando" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list *ngIf="!cargando">
+    <ion-card *ngFor="let usuario of usuariosFiltrados">
+      <ion-item>
+        <ion-label>
+          <h2>{{ usuario.nombreUsuario }}</h2>
+          <p>{{ usuario.email }}</p>
+          <p *ngIf="usuario.nombres">{{ usuario.nombres }} {{ usuario.apellidos }}</p>
+        </ion-label>
+        <div slot="end" class="badges">
+          <ion-badge [color]="obtenerColorRol(usuario.rol)">
+            <ion-icon *ngIf="usuario.rol === 'admin'" name="shield-checkmark-outline"></ion-icon>
+            {{ usuario.rol }}
+          </ion-badge>
+          <ion-badge *ngIf="usuario.twoFactorEnabled" color="success">2FA</ion-badge>
+          <ion-badge *ngIf="!usuario.activo" color="medium">Inactivo</ion-badge>
+        </div>
+      </ion-item>
+    </ion-card>
+  </ion-list>
+</ion-content>

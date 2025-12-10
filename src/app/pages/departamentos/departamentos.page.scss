@@ -1,0 +1,93 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+ion-card {
+  cursor: pointer;
+  transition: transform 0.2s;
+  
+  &:hover {
+    transform: translateY(-4px);
+  }
+  
+  img {
+    height: 200px;
+    object-fit: cover;
+  }
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  ion-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.tipo {
+  color: var(--ion-color-medium);
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+  
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    ion-icon {
+      color: var(--ion-color-primary);
+    }
+    
+    &.precio {
+      font-weight: 600;
+      color: var(--ion-color-success);
+    }
+  }
+}
+
+.caracteristicas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+  
+  .small-badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--ion-color-light);
+  
+  ion-button {
+    --padding-start: 8px;
+    --padding-end: 8px;
+    
+    ion-icon {
+      font-size: 20px;
+    }
+  }
+}
+
+.fab-button {
+  margin: 16px;
+  --border-radius: 12px;
+}

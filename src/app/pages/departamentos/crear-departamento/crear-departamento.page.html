@@ -1,0 +1,237 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/departamentos"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ esEdicion ? 'Editar Departamento' : 'Nuevo Departamento' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <div *ngIf="cargando" class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Cargando departamento...</p>
+    </div>
+    <div *ngIf="cargando" class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Cargando departamento...</p>
+    </div>
+
+    <ion-list *ngIf="!cargando">
+      <ion-item>
+        <ion-input
+          label="Número"
+          labelPlacement="stacked"
+          [(ngModel)]="formulario.numero"
+          placeholder="Ej: 101"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="Tipo" [(ngModel)]="formulario.tipo">
+          <ion-select-option value="individual">Individual</ion-select-option>
+          <ion-select-option value="doble">Doble</ion-select-option>
+          <ion-select-option value="matrimonial">Matrimonial</ion-select-option>
+          <ion-select-option value="suite">Suite</ion-select-option>
+          <ion-select-option value="presidencial">Presidencial</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          label="Piso"
+          labelPlacement="stacked"
+          type="number"
+          [(ngModel)]="formulario.piso"
+          min="1"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          label="Precio por noche ($)"
+          labelPlacement="stacked"
+          type="number"
+          [(ngModel)]="formulario.precioNoche"
+          min="0"
+          step="0.01"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          label="Capacidad de personas"
+          labelPlacement="stacked"
+          type="number"
+          [(ngModel)]="formulario.capacidadPersonas"
+          min="1"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          label="Número de camas"
+          labelPlacement="stacked"
+          type="number"
+          [(ngModel)]="formulario.numeroCamas"
+          min="1"
+          required
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="Tipo de camas" [(ngModel)]="formulario.tipoCamas">
+          <ion-select-option value="individual">Individual</ion-select-option>
+          <ion-select-option value="matrimonial">Matrimonial</ion-select-option>
+          <ion-select-option value="queen">Queen</ion-select-option>
+          <ion-select-option value="king">King</ion-select-option>
+          <ion-select-option value="mixta">Mixta</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="Estado" [(ngModel)]="formulario.estado">
+          <ion-select-option value="disponible">Disponible</ion-select-option>
+          <ion-select-option value="ocupado">Ocupado</ion-select-option>
+          <ion-select-option value="mantenimiento">Mantenimiento</ion-select-option>
+          <ion-select-option value="reservado">Reservado</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-textarea
+          label="Descripción"
+          labelPlacement="stacked"
+          [(ngModel)]="formulario.descripcion"
+          placeholder="Descripción del departamento..."
+          rows="4"
+        ></ion-textarea>
+      </ion-item>
+
+      <ion-item>
+        <ion-textarea
+          label="Observaciones"
+          labelPlacement="stacked"
+          [(ngModel)]="formulario.observaciones"
+          placeholder="Observaciones adicionales..."
+          rows="3"
+        ></ion-textarea>
+      </ion-item>
+
+      <div class="section-header">
+        <h3>Características</h3>
+      </div>
+
+      <div class="caracteristicas-grid">
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.wifi" labelPlacement="end">WiFi</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.televisor" labelPlacement="end">Televisor</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.aireAcondicionado" labelPlacement="end">Aire Acondicionado</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.calefaccion" labelPlacement="end">Calefacción</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.minibar" labelPlacement="end">Minibar</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.cajaFuerte" labelPlacement="end">Caja Fuerte</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.balcon" labelPlacement="end">Balcón</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.vistaAlMar" labelPlacement="end">Vista al Mar</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.banoPrivado" labelPlacement="end">Baño Privado</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.jacuzzi" labelPlacement="end">Jacuzzi</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.cocina" labelPlacement="end">Cocina</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.escritorio" labelPlacement="end">Escritorio</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.secadorPelo" labelPlacement="end">Secador de Pelo</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.plancha" labelPlacement="end">Plancha</ion-checkbox>
+        </ion-item>
+        <ion-item lines="none">
+          <ion-checkbox [(ngModel)]="formulario.caracteristicas.telefono" labelPlacement="end">Teléfono</ion-checkbox>
+        </ion-item>
+      </div>
+
+      <div class="section-header">
+        <h3>Imágenes del Departamento</h3>
+      </div>
+
+      <ion-item>
+        <ion-input
+          label="URL de la imagen"
+          labelPlacement="stacked"
+          [(ngModel)]="nuevaImagenUrl"
+          placeholder="https://ejemplo.com/imagen.jpg"
+          type="url"
+          (keyup.enter)="agregarImagen()"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          label="Descripción (opcional)"
+          labelPlacement="stacked"
+          [(ngModel)]="nuevaImagenDesc"
+          placeholder="Ej: Vista del dormitorio"
+          (keyup.enter)="agregarImagen()"
+        ></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="agregarImagen()" [disabled]="!nuevaImagenUrl.trim()">
+        <ion-icon slot="start" name="add-outline"></ion-icon>
+        Agregar Imagen
+      </ion-button>
+
+      <div class="imagenes-list" *ngIf="formulario.imagenes.length > 0">
+        <div class="imagen-item" *ngFor="let img of formulario.imagenes; let i = index">
+          <img [src]="img.url" [alt]="img.descripcion || 'Imagen del departamento'" />
+          <div class="imagen-info">
+            <span class="url">{{ img.url }}</span>
+            <span class="desc" *ngIf="img.descripcion">{{ img.descripcion }}</span>
+          </div>
+          <ion-button fill="clear" color="danger" size="small" (click)="eliminarImagen(i)">
+            <ion-icon name="trash-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+    </ion-list>
+
+    <div class="actions">
+      <ion-button expand="block" (click)="cancelar()" fill="outline" color="medium">
+        <ion-icon slot="start" name="close-outline"></ion-icon>
+        Cancelar
+      </ion-button>
+      <ion-button 
+        expand="block" 
+        (click)="guardarDepartamento()" 
+        [disabled]="!validarFormulario() || guardando"
+      >
+        <ion-icon slot="start" name="save-outline"></ion-icon>
+        {{ guardando ? 'Guardando...' : (esEdicion ? 'Actualizar' : 'Guardar') }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,51 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+ion-card {
+  margin: 12px;
+}
+
+ion-item {
+  --padding-start: 16px;
+  
+  h2 {
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  p {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.9rem;
+    color: var(--ion-color-medium);
+    margin: 4px 0;
+    
+    ion-icon {
+      font-size: 1rem;
+    }
+  }
+}
+
+.badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  
+  ion-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  
+  .reservas-count {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ion-color-primary);
+  }
+}

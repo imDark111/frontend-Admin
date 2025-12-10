@@ -1,0 +1,64 @@
+.perfil-container {
+  padding: 16px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.foto-card {
+  text-align: center;
+  
+  .foto-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 16px;
+    
+    .avatar-large {
+      width: 120px;
+      height: 120px;
+    }
+    
+    .cambiar-foto-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      --border-radius: 50%;
+      --padding-start: 8px;
+      --padding-end: 8px;
+    }
+  }
+  
+  h2 {
+    margin: 8px 0;
+    font-weight: 600;
+  }
+  
+  p {
+    color: var(--ion-color-medium);
+    margin: 4px 0;
+  }
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.save-btn {
+  margin-top: 16px;
+  --border-radius: 12px;
+}
+
+.password-form {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--ion-color-light);
+}
+
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --background: transparent;
+}

@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Facturas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="autoGenerarFacturas()" [disabled]="cargando">
+        <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="cargarFacturas($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="cargando" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list *ngIf="!cargando">
+    <ion-card *ngFor="let factura of facturas">
+      <ion-card-header>
+        <div class="header-content">
+          <ion-card-title>{{ factura.numeroFactura }}</ion-card-title>
+          <ion-badge [color]="obtenerColorEstado(factura.estadoPago)">
+            {{ factura.estadoPago }}
+          </ion-badge>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-item lines="none">
+          <ion-icon name="documents-outline" slot="start"></ion-icon>
+          <ion-label>
+            <p>Fecha: {{ formatearFecha(factura.fechaEmision) }}</p>
+            <p *ngIf="factura.metodoPago">Método: {{ factura.metodoPago }}</p>
+          </ion-label>
+        </ion-item>
+        
+        <div class="total">
+          <ion-icon name="cash-outline"></ion-icon>
+          <strong>{{ formatearMoneda(factura.total) }}</strong>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>

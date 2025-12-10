@@ -1,0 +1,168 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Mi Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="usuario" class="perfil-container">
+    <!-- Foto de Perfil -->
+    <ion-card class="foto-card">
+      <ion-card-content>
+        <div class="foto-container">
+          <ion-avatar class="avatar-large">
+            <img [src]="getUrlFoto()" [alt]="usuario.nombreUsuario" />
+          </ion-avatar>
+          <ion-button fill="clear" class="cambiar-foto-btn" (click)="fileInput.click()">
+            <input 
+              type="file" 
+              accept="image/*"
+              (change)="cambiarFoto($event)" 
+              hidden 
+              #fileInput 
+            />
+            <ion-icon name="camera-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <h2>{{ usuario.nombreUsuario }}</h2>
+        <p>{{ usuario.email }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Información Personal -->
+    <ion-card>
+      <ion-card-header>
+        <div class="card-header">
+          <ion-card-title>Información Personal</ion-card-title>
+          <ion-button fill="clear" (click)="editando = !editando">
+            {{ editando ? 'Cancelar' : 'Editar' }}
+          </ion-button>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-label position="stacked">Nombre de Usuario</ion-label>
+            <ion-input 
+              [(ngModel)]="usuario.nombreUsuario" 
+              [readonly]="!editando"
+              placeholder="Nombre de usuario">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon name="mail-outline" slot="start"></ion-icon>
+            <ion-label position="stacked">Email</ion-label>
+            <ion-input 
+              [(ngModel)]="usuario.email" 
+              [readonly]="!editando"
+              type="email"
+              placeholder="Email">
+            </ion-input>
+          </ion-item>
+
+          <ion-item *ngIf="usuario.telefono">
+            <ion-label position="stacked">Teléfono</ion-label>
+            <ion-input 
+              [(ngModel)]="usuario.telefono" 
+              [readonly]="!editando"
+              placeholder="Teléfono">
+            </ion-input>
+          </ion-item>
+
+          <ion-item *ngIf="usuario.direccion">
+            <ion-label position="stacked">Dirección</ion-label>
+            <ion-input 
+              [(ngModel)]="usuario.direccion" 
+              [readonly]="!editando"
+              placeholder="Dirección">
+            </ion-input>
+          </ion-item>
+        </ion-list>
+
+        <ion-button 
+          *ngIf="editando" 
+          expand="block" 
+          (click)="guardarCambios()"
+          class="save-btn">
+          Guardar Cambios
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Seguridad -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Seguridad</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-icon name="shield-checkmark-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Autenticación de Dos Factores</h3>
+              <p>{{ usuario.twoFactorEnabled ? 'Activado' : 'Desactivado' }}</p>
+            </ion-label>
+            <ion-toggle 
+              [(ngModel)]="usuario.twoFactorEnabled"
+              (ionChange)="toggle2FA()">
+            </ion-toggle>
+          </ion-item>
+
+          <ion-item button (click)="cambiarPassword = !cambiarPassword">
+            <ion-icon name="key-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Cambiar Contraseña</h3>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+
+        <div *ngIf="cambiarPassword" class="password-form">
+          <ion-item>
+            <ion-label position="stacked">Contraseña Actual</ion-label>
+            <ion-input 
+              type="password"
+              [(ngModel)]="passwordData.passwordActual"
+              placeholder="Contraseña actual">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Nueva Contraseña</ion-label>
+            <ion-input 
+              type="password"
+              [(ngModel)]="passwordData.passwordNueva"
+              placeholder="Nueva contraseña">
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="stacked">Confirmar Contraseña</ion-label>
+            <ion-input 
+              type="password"
+              [(ngModel)]="passwordData.confirmarPassword"
+              placeholder="Confirmar contraseña">
+            </ion-input>
+          </ion-item>
+
+          <ion-button expand="block" (click)="guardarPassword()" class="save-btn">
+            Cambiar Contraseña
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+
+  <ion-toast
+    [isOpen]="mostrarToast"
+    [message]="mensajeToast"
+    [duration]="3000"
+    (didDismiss)="mostrarToast = false">
+  </ion-toast>
+</ion-content>

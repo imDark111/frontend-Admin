@@ -1,0 +1,91 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+ion-card {
+  margin: 12px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  
+  ion-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+.precio-detalle {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
+  .precio-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    
+    &.descuento {
+      color: var(--ion-color-success);
+    }
+    
+    &.recargo {
+      color: var(--ion-color-warning);
+    }
+    
+    &.total {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 2px solid var(--ion-color-primary);
+      font-size: 1.1rem;
+      
+      .precio-total {
+        color: var(--ion-color-primary);
+        font-size: 1.3rem;
+      }
+    }
+  }
+}
+
+.pendiente {
+  color: var(--ion-color-medium);
+  font-style: italic;
+}
+
+.acciones-container {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  
+  ion-button {
+    --border-radius: 12px;
+  }
+}
+
+ion-list {
+  background: transparent;
+}
+
+ion-item {
+  --background: transparent;
+  
+  ion-icon {
+    font-size: 1.5rem;
+  }
+  
+  h3 {
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  p {
+    font-size: 0.9rem;
+    color: var(--ion-color-medium);
+  }
+}

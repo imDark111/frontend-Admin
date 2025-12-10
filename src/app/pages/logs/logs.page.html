@@ -1,0 +1,59 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Logs del Sistema</ion-title>
+  </ion-toolbar>
+  
+  <ion-toolbar>
+    <ion-select 
+      placeholder="Filtrar por acción"
+      interface="popover"
+      (ionChange)="filtrarPorAccion($event)"
+      [(ngModel)]="accionFiltro">
+      <ion-select-option value="">Todas</ion-select-option>
+      <ion-select-option value="CREATE">CREATE</ion-select-option>
+      <ion-select-option value="READ">READ</ion-select-option>
+      <ion-select-option value="UPDATE">UPDATE</ion-select-option>
+      <ion-select-option value="DELETE">DELETE</ion-select-option>
+      <ion-select-option value="LOGIN">LOGIN</ion-select-option>
+      <ion-select-option value="LOGOUT">LOGOUT</ion-select-option>
+      <ion-select-option value="LOGIN_FAILED">LOGIN_FAILED</ion-select-option>
+      <ion-select-option value="REGISTER">REGISTER</ion-select-option>
+    </ion-select>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="cargarLogs($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="cargando" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list *ngIf="!cargando">
+    <ion-card *ngFor="let log of logsFiltrados">
+      <ion-item>
+        <ion-icon name="finger-print-outline" slot="start" [color]="obtenerColorAccion(log.accion)"></ion-icon>
+        <ion-label>
+          <h2>
+            <ion-badge [color]="obtenerColorAccion(log.accion)">{{ log.accion }}</ion-badge>
+            {{ log.entidad }}
+          </h2>
+          <p>Usuario: {{ getUsuarioNombre(log) }}</p>
+          <p *ngIf="log.ip">IP: {{ log.ip }}</p>
+          <p *ngIf="log.descripcion">{{ log.descripcion }}</p>
+          <p class="fecha">{{ formatearFecha(log.createdAt) }}</p>
+        </ion-label>
+        <ion-badge 
+          slot="end" 
+          [color]="log.exitoso ? 'success' : 'danger'">
+          {{ log.exitoso ? '✓' : '✗' }}
+        </ion-badge>
+      </ion-item>
+    </ion-card>
+  </ion-list>
+</ion-content>

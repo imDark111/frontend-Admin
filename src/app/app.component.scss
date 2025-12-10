@@ -1,0 +1,30 @@
+ion-menu {
+  --ion-background-color: #ffffff;
+}
+
+ion-menu ion-toolbar {
+  --background: var(--ion-color-primary);
+  --color: #ffffff;
+}
+
+ion-menu ion-item {
+  --background: transparent;
+  --color: #333333;
+  margin: 4px 8px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+ion-menu ion-item:hover {
+  --background: rgba(27, 94, 32, 0.1);
+}
+
+ion-menu ion-item.active-item {
+  --background: var(--ion-color-primary);
+  --color: #ffffff;
+  font-weight: 600;
+}
+
+ion-menu ion-icon {
+  font-size: 22px;
+}

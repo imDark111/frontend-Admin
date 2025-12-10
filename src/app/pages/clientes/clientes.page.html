@@ -1,0 +1,46 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Clientes</ion-title>
+  </ion-toolbar>
+  
+  <ion-toolbar>
+    <ion-searchbar 
+      placeholder="Buscar cliente..."
+      (ionInput)="buscar($event)"
+      [debounce]="300">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="cargarClientes($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="cargando" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list *ngIf="!cargando">
+    <ion-card *ngFor="let cliente of clientesFiltrados">
+      <ion-item>
+        <ion-icon name="person-outline" slot="start" color="primary"></ion-icon>
+        <ion-label>
+          <h2>{{ getNombreCompleto(cliente) }}</h2>
+          <p><ion-icon name="mail-outline"></ion-icon> {{ cliente.email }}</p>
+          <p><ion-icon name="call-outline"></ion-icon> {{ cliente.telefono }}</p>
+          <p>Cédula: {{ cliente.cedula }}</p>
+        </ion-label>
+        <div slot="end" class="badges">
+          <ion-badge *ngIf="cliente.esFrecuente" color="success">
+            <ion-icon name="star-outline"></ion-icon> Frecuente
+          </ion-badge>
+          <p class="reservas-count">{{ cliente.reservasRealizadas }} reserva(s)</p>
+        </div>
+      </ion-item>
+    </ion-card>
+  </ion-list>
+</ion-content>

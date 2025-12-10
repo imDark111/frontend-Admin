@@ -1,0 +1,36 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+ion-card {
+  margin: 12px;
+}
+
+ion-item {
+  h2 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+  
+  p {
+    font-size: 0.85rem;
+    color: var(--ion-color-medium);
+    margin: 4px 0;
+    
+    &.fecha {
+      font-size: 0.8rem;
+      margin-top: 8px;
+    }
+  }
+}
+
+ion-select {
+  width: 100%;
+  max-width: 300px;
+  padding: 0 16px;
+}

@@ -1,0 +1,162 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Reportes</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="descargarReporte()" [disabled]="!datos">
+        <ion-icon name="download-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  
+  <ion-toolbar>
+    <ion-segment [(ngModel)]="tipoReporte" (ionChange)="cambiarTipo($event)">
+      <ion-segment-button value="reservas">
+        <ion-label>Reservas</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="financiero">
+        <ion-label>Financiero</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="ocupacion">
+        <ion-label>Ocupación</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="clientes">
+        <ion-label>Clientes</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="cargando" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="!cargando && datos" class="reporte-container">
+    <!-- Reporte de Reservas -->
+    <div *ngIf="tipoReporte === 'reservas'">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="stats-chart-outline"></ion-icon>
+            Reporte de Reservas
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <h3>{{ datos.totalReservas || 0 }}</h3>
+              <p>Total Reservas</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ datos.confirmadas || 0 }}</h3>
+              <p>Confirmadas</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ datos.completadas || 0 }}</h3>
+              <p>Completadas</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ datos.canceladas || 0 }}</h3>
+              <p>Canceladas</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ formatearMoneda(datos.totalIngresos || 0) }}</h3>
+              <p>Ingresos Totales</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ formatearMoneda(datos.promedioIngreso || 0) }}</h3>
+              <p>Promedio por Reserva</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Reporte Financiero -->
+    <div *ngIf="tipoReporte === 'financiero'">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="stats-chart-outline"></ion-icon>
+            Reporte Financiero
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <h3>{{ formatearMoneda(datos.ingresosTotales || 0) }}</h3>
+              <p>Ingresos Totales</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ formatearMoneda(datos.facturasPagadas || 0) }}</h3>
+              <p>Facturas Pagadas</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ formatearMoneda(datos.facturasPendientes || 0) }}</h3>
+              <p>Facturas Pendientes</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Reporte de Ocupación -->
+    <div *ngIf="tipoReporte === 'ocupacion'">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="stats-chart-outline"></ion-icon>
+            Reporte de Ocupación
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <h3>{{ datos.tasaOcupacion || 0 }}%</h3>
+              <p>Tasa de Ocupación</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ datos.diasOcupados || 0 }}</h3>
+              <p>Días Ocupados</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ datos.diasDisponibles || 0 }}</h3>
+              <p>Días Disponibles</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+
+    <!-- Reporte de Clientes -->
+    <div *ngIf="tipoReporte === 'clientes'">
+      <ion-card>
+        <ion-card-header>
+          <ion-card-title>
+            <ion-icon name="stats-chart-outline"></ion-icon>
+            Reporte de Clientes
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <div class="stats-grid">
+            <div class="stat-item">
+              <h3>{{ datos.totalClientes || 0 }}</h3>
+              <p>Total Clientes</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ datos.clientesFrecuentes || 0 }}</h3>
+              <p>Clientes Frecuentes</p>
+            </div>
+            <div class="stat-item">
+              <h3>{{ datos.clientesNuevos || 0 }}</h3>
+              <p>Clientes Nuevos (30d)</p>
+            </div>
+          </div>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

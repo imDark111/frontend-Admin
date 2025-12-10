@@ -1,11 +1,12 @@
 {
-  "name": "frontend-Admin",
+  "name": "frontend-admin",
   "version": "0.0.1",
   "author": "Ionic Framework",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:local": "ionic serve -- --host 0.0.0.0",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",

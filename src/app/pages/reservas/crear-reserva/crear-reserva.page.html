@@ -1,0 +1,103 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/reservas"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Nueva Reserva</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="container">
+    <ion-list *ngIf="!cargando">
+      <ion-item>
+        <ion-select label="Cliente" [(ngModel)]="formulario.clienteId" placeholder="Seleccione un cliente">
+          <ion-select-option *ngFor="let cliente of clientes" [value]="cliente.id">
+            {{ cliente.nombres }} {{ cliente.apellidos }} - {{ cliente.cedula }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-select label="Departamento" [(ngModel)]="formulario.departamentoId" placeholder="Seleccione un departamento">
+          <ion-select-option *ngFor="let depto of departamentos" [value]="depto.id">
+            {{ depto.numero }} - {{ depto.tipo }} (${{ depto.precioNoche }}/noche)
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Fecha Inicio</ion-label>
+        <ion-datetime-button datetime="fecha-inicio"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="fecha-inicio"
+              [(ngModel)]="formulario.fechaInicio"
+              presentation="date"
+              [min]="minDate"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Fecha Fin</ion-label>
+        <ion-datetime-button datetime="fecha-fin"></ion-datetime-button>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime
+              id="fecha-fin"
+              [(ngModel)]="formulario.fechaFin"
+              presentation="date"
+              [min]="formulario.fechaInicio || minDate"
+            ></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-item>
+
+      <ion-item *ngIf="calcularNoches() > 0">
+        <ion-label>
+          <h3>Número de noches</h3>
+          <p>{{ calcularNoches() }} noche(s)</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="calcularTotal() > 0">
+        <ion-label>
+          <h3>Costo Total</h3>
+          <p>${{ calcularTotal().toFixed(2) }}</p>
+        </ion-label>
+      </ion-item>
+
+      <ion-item>
+        <ion-textarea
+          label="Observaciones"
+          [(ngModel)]="formulario.observaciones"
+          placeholder="Observaciones adicionales..."
+          rows="4"
+        ></ion-textarea>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="cargando" class="loading-container">
+      <ion-spinner></ion-spinner>
+      <p>Cargando datos...</p>
+    </div>
+
+    <div class="actions" *ngIf="!cargando">
+      <ion-button expand="block" (click)="cancelar()" fill="outline" color="medium">
+        <ion-icon slot="start" name="close-outline"></ion-icon>
+        Cancelar
+      </ion-button>
+      <ion-button 
+        expand="block" 
+        (click)="guardarReserva()" 
+        [disabled]="!validarFormulario() || guardando"
+      >
+        <ion-icon slot="start" name="save-outline"></ion-icon>
+        {{ guardando ? 'Guardando...' : 'Guardar Reserva' }}
+      </ion-button>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,93 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Reservas</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="nuevaReserva()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  
+  <ion-toolbar>
+    <ion-searchbar 
+      placeholder="Buscar por código o cliente..."
+      (ionInput)="buscar($event)"
+      [debounce]="300">
+    </ion-searchbar>
+  </ion-toolbar>
+  
+  <ion-toolbar>
+    <ion-select 
+      placeholder="Filtrar por estado"
+      interface="popover"
+      (ionChange)="filtrarPorEstado($event)"
+      [(ngModel)]="estadoFiltro">
+      <ion-select-option value="">Todos</ion-select-option>
+      <ion-select-option value="pendiente">Pendiente</ion-select-option>
+      <ion-select-option value="confirmada">Confirmada</ion-select-option>
+      <ion-select-option value="en-curso">En Curso</ion-select-option>
+      <ion-select-option value="completada">Completada</ion-select-option>
+      <ion-select-option value="cancelada">Cancelada</ion-select-option>
+    </ion-select>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="cargarReservas($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="cargando" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="!cargando && reservasFiltradas.length === 0" class="empty-state">
+    <ion-icon name="calendar-outline" size="large"></ion-icon>
+    <h2>No hay reservas</h2>
+    <p>No se encontraron reservas con los filtros aplicados</p>
+    <ion-button (click)="nuevaReserva()">
+      <ion-icon name="add-outline" slot="start"></ion-icon>
+      Nueva Reserva
+    </ion-button>
+  </div>
+
+  <ion-list *ngIf="!cargando && reservasFiltradas.length > 0">
+    <ion-card *ngFor="let reserva of reservasFiltradas" (click)="verDetalle(reserva.id)">
+      <ion-card-header>
+        <div class="card-header-content">
+          <div>
+            <ion-card-title>{{ reserva.codigoReserva }}</ion-card-title>
+            <p class="cliente-nombre">{{ getNombreCliente(reserva) }}</p>
+          </div>
+          <ion-badge [color]="obtenerColorEstado(reserva.estado)">
+            {{ reserva.estado }}
+          </ion-badge>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="reserva-info">
+          <div class="info-item">
+            <ion-icon name="bed-outline"></ion-icon>
+            <span>Depto. {{ getNumeroDepartamento(reserva) }}</span>
+          </div>
+          <div class="info-item">
+            <ion-icon name="calendar-outline"></ion-icon>
+            <span>{{ formatearFecha(reserva.fechaInicio) }} - {{ formatearFecha(reserva.fechaFin) }}</span>
+          </div>
+          <div class="info-item">
+            <ion-icon name="moon-outline"></ion-icon>
+            <span>{{ reserva.numeroNoches }} noche(s)</span>
+          </div>
+          <div class="info-item total">
+            <strong>Total:</strong>
+            <span class="precio">{{ formatearMoneda(reserva.total) }}</span>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>

@@ -1,0 +1,222 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/reservas"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Detalle de Reserva</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="cargando" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <div *ngIf="!cargando && reserva">
+    <!-- Información Principal -->
+    <ion-card>
+      <ion-card-header>
+        <div class="header-content">
+          <ion-card-title>{{ reserva.codigoReserva }}</ion-card-title>
+          <ion-badge [color]="obtenerColorEstado(reserva.estado)">
+            {{ reserva.estado }}
+          </ion-badge>
+        </div>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-icon name="person-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Cliente</h3>
+              <p>{{ getNombreCliente() }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon name="bed-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Departamento</h3>
+              <p>{{ getInfoDepartamento() }}</p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon name="calendar-outline" slot="start"></ion-icon>
+            <ion-label>
+              <h3>Fechas</h3>
+              <p>{{ formatearFecha(reserva.fechaInicio) }} - {{ formatearFecha(reserva.fechaFin) }}</p>
+              <p>{{ reserva.numeroNoches }} noche(s)</p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Detalles Financieros -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Detalles Financieros</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <div class="precio-detalle">
+          <div class="precio-item">
+            <span>Precio por noche:</span>
+            <span>{{ formatearMoneda(reserva.precioNoche) }}</span>
+          </div>
+          <div class="precio-item">
+            <span>Subtotal ({{ reserva.numeroNoches }} noches):</span>
+            <span>{{ formatearMoneda(reserva.subtotal) }}</span>
+          </div>
+          
+          <div *ngIf="reserva.descuentoClienteFrecuente > 0" class="precio-item descuento">
+            <span>Descuento cliente frecuente:</span>
+            <span>-{{ formatearMoneda(reserva.descuentoClienteFrecuente) }}</span>
+          </div>
+          
+          <div *ngIf="reserva.aplicaIVA" class="precio-item">
+            <span>IVA (15%):</span>
+            <span>{{ formatearMoneda(reserva.iva) }}</span>
+          </div>
+          
+          <div *ngIf="reserva.esFeriado && reserva.recargoFeriado > 0" class="precio-item recargo">
+            <span>Recargo feriado ({{ reserva.recargoPorcentaje }}%):</span>
+            <span>+{{ formatearMoneda(reserva.recargoFeriado) }}</span>
+          </div>
+          
+          <div class="precio-item total">
+            <strong>TOTAL:</strong>
+            <strong class="precio-total">{{ formatearMoneda(reserva.total) }}</strong>
+          </div>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Check-in / Check-out -->
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Check-in / Check-out</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list>
+          <ion-item>
+            <ion-icon 
+              [name]="reserva.checkIn.realizado ? 'checkmark-circle-outline' : 'close-circle-outline'" 
+              [color]="reserva.checkIn.realizado ? 'success' : 'medium'"
+              slot="start">
+            </ion-icon>
+            <ion-label>
+              <h3>Check-in</h3>
+              <p *ngIf="reserva.checkIn.realizado">
+                {{ formatearFecha(reserva.checkIn.fecha!) }}
+              </p>
+              <p *ngIf="!reserva.checkIn.realizado" class="pendiente">
+                Pendiente
+              </p>
+            </ion-label>
+          </ion-item>
+
+          <ion-item>
+            <ion-icon 
+              [name]="reserva.checkOut.realizado ? 'checkmark-circle-outline' : 'close-circle-outline'" 
+              [color]="reserva.checkOut.realizado ? 'success' : 'medium'"
+              slot="start">
+            </ion-icon>
+            <ion-label>
+              <h3>Check-out</h3>
+              <p *ngIf="reserva.checkOut.realizado">
+                {{ formatearFecha(reserva.checkOut.fecha!) }}
+              </p>
+              <p *ngIf="!reserva.checkOut.realizado" class="pendiente">
+                Pendiente
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Observaciones -->
+    <ion-card *ngIf="reserva.observaciones || reserva.solicitudesEspeciales">
+      <ion-card-header>
+        <ion-card-title>Observaciones</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p *ngIf="reserva.observaciones">{{ reserva.observaciones }}</p>
+        <p *ngIf="reserva.solicitudesEspeciales"><strong>Solicitudes:</strong> {{ reserva.solicitudesEspeciales }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <!-- Acciones -->
+    <div class="acciones-container">
+      <ion-button 
+        *ngIf="puedeHacerCheckIn()" 
+        expand="block" 
+        color="success"
+        (click)="mostrarAlertCheckIn = true">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Realizar Check-in
+      </ion-button>
+
+      <ion-button 
+        *ngIf="puedeHacerCheckOut()" 
+        expand="block" 
+        color="primary"
+        (click)="mostrarAlertCheckOut = true">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Realizar Check-out
+      </ion-button>
+
+      <ion-button 
+        expand="block" 
+        color="tertiary"
+        (click)="verFactura()">
+        <ion-icon name="documents-outline" slot="start"></ion-icon>
+        Ver Factura
+      </ion-button>
+
+      <ion-button 
+        *ngIf="puedeCancelar()" 
+        expand="block" 
+        color="danger"
+        fill="outline"
+        (click)="mostrarAlertCancelar = true">
+        <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+        Cancelar Reserva
+      </ion-button>
+    </div>
+  </div>
+
+  <!-- Alerts -->
+  <ion-alert
+    [isOpen]="mostrarAlertCheckIn"
+    header="Confirmar Check-in"
+    message="¿Está seguro de realizar el check-in para esta reserva?"
+    [buttons]="botonesCheckIn">
+  </ion-alert>
+
+  <ion-alert
+    [isOpen]="mostrarAlertCheckOut"
+    header="Confirmar Check-out"
+    message="¿Está seguro de realizar el check-out para esta reserva?"
+    [buttons]="botonesCheckOut">
+  </ion-alert>
+
+  <ion-alert
+    [isOpen]="mostrarAlertCancelar"
+    header="Cancelar Reserva"
+    message="¿Está seguro de cancelar esta reserva? Esta acción no se puede deshacer."
+    [buttons]="botonesCancelar">
+  </ion-alert>
+
+  <ion-toast
+    [isOpen]="mostrarToast"
+    [message]="mensajeToast"
+    [duration]="3000"
+    (didDismiss)="mostrarToast = false">
+  </ion-toast>
+</ion-content>

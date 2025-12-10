@@ -1,0 +1,23 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+ion-card {
+  margin: 12px;
+}
+
+.badges {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  
+  ion-badge {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    text-transform: uppercase;
+  }
+}

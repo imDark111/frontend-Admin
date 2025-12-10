@@ -1,0 +1,42 @@
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.reporte-container {
+  padding: 16px;
+}
+
+ion-card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  
+  .stat-item {
+    text-align: center;
+    padding: 20px;
+    background: var(--ion-color-light);
+    border-radius: 12px;
+    
+    h3 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--ion-color-primary);
+      margin: 0 0 8px 0;
+    }
+    
+    p {
+      font-size: 0.9rem;
+      color: var(--ion-color-medium);
+      margin: 0;
+    }
+  }
+}

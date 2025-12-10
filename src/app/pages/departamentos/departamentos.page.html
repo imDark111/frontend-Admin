@@ -1,0 +1,101 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/dashboard"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Departamentos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="nuevo()">
+        <ion-icon name="add-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  
+  <ion-toolbar>
+    <ion-searchbar 
+      placeholder="Buscar departamento..."
+      (ionInput)="buscar($event)"
+      [debounce]="300">
+    </ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="cargarDepartamentos($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+  <div *ngIf="cargando" class="loading-container">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-grid *ngIf="!cargando">
+    <ion-row>
+      <ion-col size="12" size-md="6" size-lg="4" *ngFor="let depto of departamentosFiltrados">
+        <ion-card (click)="verDetalle(depto)">
+          <img 
+            [src]="getImagenPrincipal(depto)" 
+            [alt]="'Departamento ' + depto.numero"
+            (error)="onImageError($event)"
+          />
+          
+          <ion-card-header>
+            <div class="header-content">
+              <ion-card-title>Depto. {{ depto.numero }}</ion-card-title>
+              <ion-badge [color]="obtenerColorEstado(depto.estado)">
+                {{ depto.estado }}
+              </ion-badge>
+            </div>
+            <p class="tipo">{{ depto.tipo | titlecase }}</p>
+          </ion-card-header>
+
+          <ion-card-content>
+            <div class="info-grid">
+              <div class="info-item">
+                <ion-icon name="people-outline"></ion-icon>
+                <span>{{ depto.capacidadPersonas }} personas</span>
+              </div>
+              <div class="info-item">
+                <ion-icon name="bed-outline"></ion-icon>
+                <span>{{ depto.numeroCamas }} cama(s)</span>
+              </div>
+              <div class="info-item precio">
+                <ion-icon name="cash-outline"></ion-icon>
+                <span>{{ formatearMoneda(depto.precioNoche) }}/noche</span>
+              </div>
+            </div>
+
+            <div class="caracteristicas">
+              <ion-badge *ngIf="depto.caracteristicas.wifi" color="tertiary" class="small-badge">WiFi</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.televisor" color="tertiary" class="small-badge">TV</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.aireAcondicionado" color="tertiary" class="small-badge">A/C</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.calefaccion" color="tertiary" class="small-badge">Calefacción</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.minibar" color="tertiary" class="small-badge">Minibar</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.cajaFuerte" color="tertiary" class="small-badge">Caja Fuerte</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.balcon" color="tertiary" class="small-badge">Balcón</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.vistaAlMar" color="tertiary" class="small-badge">Vista al Mar</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.banoPrivado" color="tertiary" class="small-badge">Baño Privado</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.jacuzzi" color="tertiary" class="small-badge">Jacuzzi</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.cocina" color="tertiary" class="small-badge">Cocina</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.escritorio" color="tertiary" class="small-badge">Escritorio</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.secadorPelo" color="tertiary" class="small-badge">Secador</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.plancha" color="tertiary" class="small-badge">Plancha</ion-badge>
+              <ion-badge *ngIf="depto.caracteristicas.telefono" color="tertiary" class="small-badge">Teléfono</ion-badge>
+            </div>
+
+            <div class="actions">
+              <ion-button fill="clear" size="small" (click)="editar(depto, $event)">
+                <ion-icon slot="icon-only" name="create-outline"></ion-icon>
+              </ion-button>
+            </div>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-button expand="block" class="fab-button" (click)="nuevo()">
+    <ion-icon name="add-outline" slot="start"></ion-icon>
+    Nuevo Departamento
+  </ion-button>
+</ion-content>
